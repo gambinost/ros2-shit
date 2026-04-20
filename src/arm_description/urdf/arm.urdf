@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<robot name="robotic_arm">
+
+  <!-- ==================== MATERIALS ==================== -->
+  <material name="blue">
+    <color rgba="0.2 0.4 0.8 1.0"/>
+  </material>
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="0.8 0.2 0.2 1.0"/>
+  </material>
+
+  <!-- Dummy world link — fixes KDL root inertia warning -->
+  <link name="world"/>
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <!-- ==================== BASE LINK ==================== -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.08 0.08 0.071"/>
+      </geometry>
+      <origin xyz="0 0 0.0355"/>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.08 0.08 0.071"/>
+      </geometry>
+      <origin xyz="0 0 0.0355"/>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin xyz="0 0 0.0355"/>
+      <inertia ixx="0.001" iyy="0.001" izz="0.001"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <!-- ==================== JOINT 1 — Base Rotation (Z axis) ==================== -->
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="L1"/>
+    <origin xyz="0 0 0.071"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.5708" upper="1.5708" effort="10" velocity="1.0"/>
+  </joint>
+
+  <!-- ==================== L1 — 0.10m tall ==================== -->
+  <link name="L1">
+    <visual>
+      <geometry>
+        <cylinder radius="0.025" length="0.10"/>
+      </geometry>
+      <origin xyz="0 0 0.05"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.025" length="0.10"/>
+      </geometry>
+      <origin xyz="0 0 0.05"/>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin xyz="0 0 0.05"/>
+      <inertia ixx="0.001" iyy="0.001" izz="0.0005"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <!-- ==================== JOINT 2 — Shoulder (Y axis) ==================== -->
+  <!-- rpy="0 -1.5708 0" rotates L2 to extend horizontally forward -->
+  <joint name="joint2" type="revolute">
+    <parent link="L1"/>
+    <child link="L2"/>
+    <origin xyz="0 0 0.10" rpy="0 -1.5708 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="10" velocity="1.0"/>
+  </joint>
+
+  <!-- ==================== L2 — 0.128m long ==================== -->
+  <link name="L2">
+    <visual>
+      <geometry>
+        <box size="0.128 0.03 0.03"/>
+      </geometry>
+      <origin xyz="0.064 0 0"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.128 0.03 0.03"/>
+      </geometry>
+      <origin xyz="0.064 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.3"/>
+      <origin xyz="0.064 0 0"/>
+      <inertia ixx="0.0005" iyy="0.001" izz="0.001"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <!-- ==================== JOINT 3 — Elbow (Y axis) ==================== -->
+  <joint name="joint3" type="revolute">
+    <parent link="L2"/>
+    <child link="L3"/>
+    <origin xyz="0.128 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="10" velocity="1.0"/>
+  </joint>
+
+  <!-- ==================== L3 — 0.07m long ==================== -->
+  <link name="L3">
+    <visual>
+      <geometry>
+        <box size="0.07 0.025 0.025"/>
+      </geometry>
+      <origin xyz="0.035 0 0"/>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.07 0.025 0.025"/>
+      </geometry>
+      <origin xyz="0.035 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <origin xyz="0.035 0 0"/>
+      <inertia ixx="0.0003" iyy="0.0005" izz="0.0005"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+  <!-- ==================== JOINT 4 — Wrist (Y axis) ==================== -->
+  <joint name="joint4" type="revolute">
+    <parent link="L3"/>
+    <child link="end_effector"/>
+    <origin xyz="0.07 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5708" upper="1.5708" effort="10" velocity="1.0"/>
+  </joint>
+
+  <!-- ==================== END EFFECTOR — 0.11m long ==================== -->
+  <link name="end_effector">
+    <visual>
+      <geometry>
+        <box size="0.11 0.02 0.02"/>
+      </geometry>
+      <origin xyz="0.055 0 0"/>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.11 0.02 0.02"/>
+      </geometry>
+      <origin xyz="0.055 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <origin xyz="0.055 0 0"/>
+      <inertia ixx="0.0001" iyy="0.0003" izz="0.0003"
+               ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </link>
+
+    <!-- Gazebo plugin — publishes joint states from Gazebo to ROS 2 -->
+  <gazebo>
+    <plugin filename="gz-sim-joint-state-publisher-system"
+            name="gz::sim::systems::JointStatePublisher">
+    </plugin>
+  </gazebo>
+
+</robot>

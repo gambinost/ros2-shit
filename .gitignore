@@ -1,0 +1,15 @@
+build/
+install/
+log/
+
+# Python
+__pycache__/
+*.pyc
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
