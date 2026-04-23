@@ -22,6 +22,8 @@ setup(
             'trajectory_publisher = arm_controller.trajectory_publisher:main',
             'serial_bridge = arm_controller.serial_bridge:main', 
             'arm_gui = arm_controller.arm_gui:main',
+            'pick_and_place_server = arm_controller.pick_and_place_server:main',
+
         ],
     },
 )
